@@ -146,7 +146,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 <meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/10.PNG">
 <meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/11.PNG">
 <meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/12.PNG">
-<meta property="og:updated_time" content="2018-10-05T12:27:04.767Z">
+<meta property="og:updated_time" content="2018-10-05T12:42:51.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建个人博客的简易教程">
 <meta name="twitter:description" content="写在前面其实很早就有搭建自己的专属博客的想法，一方面是希望用博客及时记录下自己在学习上的收获，方便复习；另一方面则是觉得自己似乎陷入了一种“快餐文化”，很多书、影视剧明明看过，但过不了两天就忘得一干二净了，真的就像那句话说的：I see that, but just see. 所以也希望自己能通过博客分享一些自己的人生感悟啥的，让自己变得勤于思考一些。 好了，接下来进入正题——如何让小白能在短时间">
@@ -413,7 +413,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
                 
               
 
-              <time title="创建时间：2018-10-05 14:18:37 / 修改时间：20:27:04" itemprop="dateCreated datePublished" datetime="2018-10-05T14:18:37+08:00">2018-10-05</time>
+              <time title="创建时间：2018-10-05 14:18:37 / 修改时间：20:42:51" itemprop="dateCreated datePublished" datetime="2018-10-05T14:18:37+08:00">2018-10-05</time>
             
 
             
@@ -515,7 +515,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
 <p>按三次回车，即可生成<code>id_rsa.pub</code>文件，如果你的电脑装有vim编译器，你可以用指令<code>vim ~/.ssh/id_rsa.pub</code>查看文件中的内容并进行复制；如果你没有vim，你可以使用搜索软件搜索到本地的<code>id_rsa.pub</code>文件再打开查看（搜索软件推荐everything，查看编辑软件推荐sublime text）。复制文件中的所有内容，并在Github的个人主页中点击设置，再在左侧的个人设置中点击选项<code>SSH和GPG keys</code>，然后点击右侧的<code>New SSH key</code>，出现如下界面：</p>
 <p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/9.PNG" alt="添加SSH"></p>
-<p>此时我们需要把从<code>id_rsa.pub</code>文件中复制的内容粘贴到下面的key框中，其中title可以随意填写，再点击Add SSH key即可。</p>
+<p>此时我们需要把从<code>id_rsa.pub</code>文件中复制的内容粘贴到下面的key框中，其中title可以随意填写，再点击<code>Add SSH key</code>即可。</p>
 <p>同时，为了验证SSH是否已经配置好，我们可以输入如下指令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
 <p>如果出现了类似的如下信息，即代表配置成功：</p>
@@ -528,6 +528,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 <p>然后重新生成代码并部署到GitHub的服务器上（注意掌握这三句指令，任何修改都需要在服务器上重新部署）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d //部署指令，注意这里是d而不是s</span><br></pre></td></tr></table></figure>
 <p>最后我们再次访问地址<code>用户名.github.io</code>就会发现你的博客页面已经变成next主题啦。</p>
+<p>对于搭建个人博客的过程，我参考了<a href="https://blog.csdn.net/Hoshea_chx/article/details/78826689" target="_blank" rel="noopener">这个</a>与<a href="https://blog.csdn.net/Working_Harder/article/details/52437783" target="_blank" rel="noopener">另一个</a>博客，特此感谢。</p>
 <h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2><p>尽管Github向我们提供了一个免费的域名：<code>用户名.github.io</code>，但这个域名用起来还是挺不方便的，因为它的访问速度比较慢，而且你在本地的修改部署到服务器上后会有比较大的延迟，经常要刷新好几次或者等好一会儿才会看到更新。所以我还是推荐花几十块钱买个一年的域名，在网上搜了一圈发现推荐的基本都是国外的<a href="https://sg.godaddy.com/zh/" target="_blank" rel="noopener">Godaddy</a>与阿里云的<a href="https://wanwang.aliyun.com/" target="_blank" rel="noopener">万网</a>，因为它两服务都还可以、价格还算实惠以及不用备案。我自己选择的是Godaddy，服务还行，但是我一定要吐槽的一点就是它们发邮件的速度太慢了，要过很久才能收到，尤其是QQ邮箱。由于Godaddy自己的域名解析比较慢，所以我用了DNSPod进行解析，并将Godaddy自己的域名服务器修改为DNSPod的域名地址。</p>
 <h3 id="购买域名"><a href="#购买域名" class="headerlink" title="购买域名"></a>购买域名</h3><p>上<a href="https://sg.godaddy.com/zh/" target="_blank" rel="noopener">Godaddy官网</a>买就好了，选一个自己喜欢的域名，一般<code>.com</code>和<code>.net</code>后缀的会比较贵，个人博客的话完全可以买<code>.ifo</code>与<code>.co</code>这样便宜的，还有就是Godaddy的附加服务可以都不选，没啥用。</p>
 <h3 id="DNSPod设置域名"><a href="#DNSPod设置域名" class="headerlink" title="DNSPod设置域名"></a>DNSPod设置域名</h3><p>首先进入<a href="https://www.dnspod.cn/console/dns" target="_blank" rel="noopener">DNSPod官网</a>，点击中间的<code>添加域名</code>把你刚刚买好的域名添加进行，然后点击域名进行添加记录。在这里我们需要添加两条记录，一条CNAME记录用于指向域名，多用于带www的访问；一条A记录用于指向域名对应的IP，多用于不带www的访问。以我自己的博客<code>Cyprus-hy.github.io</code>为例，我们首先ping一下它的IP：</p>
@@ -544,6 +545,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 <p>上图是我已经配置好的域名服务器，这里我再给出一下DNSPod的域名地址：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f1g1ns1.dnspod.net</span><br><span class="line">f1g1ns2.dnspod.net</span><br></pre></td></tr></table></figure>
 <p>由于域名解析生效需要一段时间（大概20分钟），所以我们只需要等待一段时间便可以在浏览器的地址栏输入自己的博客域名进行访问啦。</p>
+<p>对于域名解析的步骤，我参考了这位作者的<a href="https://www.jianshu.com/p/be3ca7841484" target="_blank" rel="noopener">博客</a>，特此感谢。</p>
 <h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>到这里，我们已经完成了个人博客的搭建，怎么样，看着自己的博客可以被浏览器访问是不是成就感爆棚呢？哈哈哈。不过别着急，细心的你应该发现了：原生的next主题的功能是不完善的，比如没有搜索、分类等功能，也没有个人头像等信息，而在下一个教程中，我就将带领大家对next主题进行优化。</p>
 
       
