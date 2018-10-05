@@ -137,7 +137,13 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 <meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/1.PNG">
 <meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/2.PNG">
 <meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/3.PNG">
-<meta property="og:updated_time" content="2018-10-05T08:20:06.556Z">
+<meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/4.PNG">
+<meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/5.PNG">
+<meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/6.PNG">
+<meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/7.PNG">
+<meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/8.PNG">
+<meta property="og:image" content="http://www.heyun.life/2018/10/05/Tips-for-Building-Personal-Blog/9.PNG">
+<meta property="og:updated_time" content="2018-10-05T10:11:07.074Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建个人博客的简易教程">
 <meta name="twitter:description" content="写在前面其实很早就有搭建自己的专属博客的想法，一方面是希望用博客及时记录下自己在学习上的收获，方便复习；另一方面则是觉得自己似乎陷入了一种“快餐文化”，很多书、影视剧明明看过，但过不了两天就忘得一干二净了，真的就像那句话说的：I see that, but just see. 所以也希望自己能通过博客分享一些自己的人生感悟啥的，让自己变得勤于思考一些。 好了，接下来进入正题——如何让小白能在短时间">
@@ -404,7 +410,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
                 
               
 
-              <time title="创建时间：2018-10-05 14:18:37 / 修改时间：16:20:06" itemprop="dateCreated datePublished" datetime="2018-10-05T14:18:37+08:00">2018-10-05</time>
+              <time title="创建时间：2018-10-05 14:18:37 / 修改时间：18:11:07" itemprop="dateCreated datePublished" datetime="2018-10-05T14:18:37+08:00">2018-10-05</time>
             
 
             
@@ -463,7 +469,12 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
         <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>其实很早就有搭建自己的专属博客的想法，一方面是希望用博客及时记录下自己在学习上的收获，方便复习；另一方面则是觉得自己似乎陷入了一种<strong>“快餐文化”</strong>，很多书、影视剧明明看过，但过不了两天就忘得一干二净了，真的就像那句话说的：<em>I see that, but just see</em>. 所以也希望自己能通过博客分享一些自己的人生感悟啥的，让自己变得勤于思考一些。</p>
 <p>好了，接下来进入正题——如何让小白能在短时间内搭出一个让自己满意的博客，从零开始显然不是我们的风格，现在都<code>8102</code>年了，早已是开源的时代，网上有那么多好的框架我们当然得利用起来，所以本篇教程是以Github Pages为服务器支撑、Hexo的next主题背景为基础的，力求做到简单易上手。（PS：搭建我自己的博客我大概是用了一天多点，但其中大部分时间是花在了主题next的优化上，因为原生的next看起来会比较朴素，需要自己根据需要再往里面加功能，这个我会在下一篇博文中给出详细教程）</p>
 <a id="more"></a>
-<h2 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>首先我们需要安装好Node.js、Git、Hexo这几个软件并提前在<a href="https://github.com/" target="_blank" rel="noopener">GitHub官网</a>上注册好账号</p>
+<h2 id="搭建个人博客"><a href="#搭建个人博客" class="headerlink" title="搭建个人博客"></a>搭建个人博客</h2><blockquote>
+<p>几点注意事项</p>
+<p>1.以下所有关于npm install与hexo的命令行指令都是在hexo的blog目录下完成</p>
+<p>2.配置文件_config.yml对格式要求很高，修改的时候注意每一个属性的冒号后有一个空格</p>
+</blockquote>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>首先我们需要安装好Node.js、Git、Hexo这几个软件并提前在<a href="https://github.com/" target="_blank" rel="noopener">GitHub官网</a>上注册好账号</p>
 <h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><p>直接去<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">Git官网</a>下载就好了，除了安装地址，其它设置都按默认的来，一直点next即可</p>
 <h4 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h4><p>一样地，也是去<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">官网</a>下载，然后一路next点到底</p>
 <h4 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h4><p>打开终端下的命令行界面，windows系统可以直接在左下角的搜索框中搜索<strong>cmd</strong>字样并回车，也可以用<strong>win+R</strong>的组合键再输入cmd打开，再在其中输入代码<code>npm install -g hexo-cli</code>，它就会自动帮你装好了，如下图：</p>
@@ -472,9 +483,47 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 <p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/2.PNG" alt="注册Github账号"></p>
 <h3 id="配置本地博客"><a href="#配置本地博客" class="headerlink" title="配置本地博客"></a>配置本地博客</h3><p>首先在你的D盘或者E盘新建一个Hexo文件夹，然后再在Hexo文件夹上面的地址栏（也就是显示Hexo绝对路径的地方）里输入cmd，打开此目录下的命令行窗口，输入以下代码（所有的指令都是一行一行输入）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo i blog //i是init的缩写 blog是项目名，代表在Hexo文件夹下再新建一个blog文件夹</span><br><span class="line">cd blog //切换到blog目录下</span><br><span class="line">hexo g //generetor的缩写，生成代码</span><br><span class="line">hexo s //server的缩写，部署在服务器上</span><br></pre></td></tr></table></figure>
-<p>正常情况下，每执行完一条语句就会有很多串代码，如果没有明显的<em>fatal</em>或<em>failed</em>等字样应该就没啥问题，同时我们在地址栏输入<strong>localhost:4000</strong>进行跳转查看，如果上面没啥问题的话，界面应该是这样的（盗用了一张别人的图，侵删）：</p>
+<p>正常情况下，每执行完一条语句就会有很多串代码，如果没有明显的fatal或failed等字样应该就没啥问题，同时我们在地址栏输入<strong>localhost:4000</strong>进行跳转查看，如果上面没啥问题的话，界面应该是这样的（盗用了一张别人的图，侵删）：</p>
 <p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/3.PNG" alt="Hexo初始界面"></p>
-<h3 id="更改主题"><a href="#更改主题" class="headerlink" title="更改主题"></a>更改主题</h3>
+<h3 id="更改主题"><a href="#更改主题" class="headerlink" title="更改主题"></a>更改主题</h3><p>相信你也发现了，Hexo自带的原生主题其实是蛮丑的，所以我们可以换一个好看一些的主题。关于主题，GitHub上有很多资源包，我比较喜欢的是<a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="noopener">yilla</a>与<a href="https://github.com/theme-next/hexo-theme-next" target="_blank" rel="noopener"><u>next</u></a>。首先我们用<code>cd themes</code>命令进入到themes文件夹下，再将主题包从Github上克隆下来：</p>
+<p><em>yilia</em>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/litten/hexo-theme-yilia.git</span><br></pre></td></tr></table></figure>
+<p><em>next</em>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+<p>由于我自己使用的是next主题，所以我接下来的一系列设置都针对的是next，如果您喜欢的是yilia或者其它主题，可以另外寻找一下教程。</p>
+<p>这时我们会发现在blog的themes目录下已经出现了一个next文件夹，而这就是我们的主题包。接下来我们介绍配置文件<strong>_config.yml</strong>，实际上它有两个，一个在blog目录下，称为<strong>站点配置文件</strong>；而另一个在next文件夹下，称为<strong>主题配置文件</strong>，这两个文件很重要，修改的时候一定要注意是改哪一个！</p>
+<p>此外，next下还细分了四种主题：Muse、Mist、Pisces与Gemini，默认的是Muse，不过我觉得Pisces和Gemini更好看（我用的是Gemini，不过我发现Pisces和Gemini一样的啊），可以自己在主题配置文件中改一改看一看：</p>
+<p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/4.PNG" alt="更改next主题"></p>
+<p>每次修改完后，我们都需要重新生成代码并部署到本地服务器上进行更新：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean //清除之前生成的代码</span><br><span class="line">hexo g //重新生成代码</span><br><span class="line">hexo s //部署到本地服务器</span><br></pre></td></tr></table></figure>
+<p>最后跳转到localhost:4000网页进行查看next的主题效果。</p>
+<h3 id="配置Github-Pages"><a href="#配置Github-Pages" class="headerlink" title="配置Github Pages"></a>配置Github Pages</h3><p>Github有专为网页服务的个人仓库，因此我们首先创建一个个人仓库，点击个人主页的右上角<code>Create a repositor</code> ，进入如下页面：</p>
+<p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/5.PNG" alt="创建个人仓库"></p>
+<p>我的界面是翻译后的，所以显示的是中文，相信英文界面你们也能看懂！这里需要注意的是仓库的名字格式必须为<strong>你的用户名.github.io</strong>，然后其它的部分可以仿照我的进行勾选。接下来我们再更改仓库的设置，点击如下图的设置：</p>
+<p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/6.PNG" alt="设置"></p>
+<p>下拉到<code>Github Pages</code>选项，并点击<code>choose a theme</code>：</p>
+<p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/7.PNG" alt="选择主题"></p>
+<p>然后在如下界面中随便选择一个主题进行应用，当然最终这个会被next替换的：</p>
+<p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/8.PNG" alt="选择主题"></p>
+<p>主题应用完之后，我们可以在地址栏输入<code>你的用户名.github.io</code>进行跳转访问，这时你就能看到Github给你提供的免费个人博客网页啦，接下来我们要做的就是把自己的网页主题更改成next。</p>
+<h3 id="配置SSH"><a href="#配置SSH" class="headerlink" title="配置SSH"></a>配置SSH</h3><p>首先执行下面的命令生成SSH：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
+<p>按三次回车，即可生成<code>id_rsa.pub</code>文件，如果你的电脑装有vim编译器，你可以用指令<code>vim ~/.ssh/id_rsa.pub</code>查看文件中的内容并进行复制；如果你没有vim，你可以使用搜索软件搜索到本地的<code>id_rsa.pub</code>文件再打开查看（搜索软件推荐everything，查看编辑软件推荐sublime text）。复制文件中的所有内容，并在Github的个人主页中点击设置，再在左侧的个人设置中点击选项<code>SSH和GPG keys</code>，然后点击右侧的<code>New SSH key</code>，出现如下界面：</p>
+<p><img src="/2018/10/05/Tips-for-Building-Personal-Blog/9.PNG" alt="添加SSH"></p>
+<p>此时我们需要把从<code>id_rsa.pub</code>文件中复制的内容粘贴到下面的key框中，其中title可以随意填写，再点击Add SSH key即可。</p>
+<p>同时，为了验证SSH是否已经配置好，我们可以输入如下指令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<p>如果出现了类似的如下信息，即代表配置成功：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi Cyprus-hy! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+<h3 id="配置本地Hexo"><a href="#配置本地Hexo" class="headerlink" title="配置本地Hexo"></a>配置本地Hexo</h3><p>首先我们打开站点配置文件，仿照我的格式对<strong>Deployment</strong>部分做如下修改：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/Cyprus-hy/Cyprus-hy.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+<p>注意仓库内填入你自己的用户名以及切记冒号后的空格！！！</p>
+<p>接下来我们安装一个插件，它可以将你在本地Hexo文件夹中的修改自动同步到Github的个人博客仓库中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<p>然后重新生成代码并部署到GitHub的服务器上（注意掌握这三句指令，任何修改都需要在服务器上重新部署）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo d //部署指令，注意这里是d而不是s</span><br></pre></td></tr></table></figure>
+<p>最后我们再次访问地址<code>你的用户名.github.io</code>就会发现你的博客页面已经变成next主题啦。</p>
+<h2 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h2>
       
     </div>
 
@@ -712,7 +761,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建个人博客"><span class="nav-number">2.</span> <span class="nav-text">搭建个人博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Git"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.1.2.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Hexo"><span class="nav-number">2.1.3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注册Github账号"><span class="nav-number">2.1.4.</span> <span class="nav-text">注册Github账号</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置本地博客"><span class="nav-number">2.2.</span> <span class="nav-text">配置本地博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改主题"><span class="nav-number">2.3.</span> <span class="nav-text">更改主题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建个人博客"><span class="nav-number">2.</span> <span class="nav-text">搭建个人博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Git"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.1.2.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装Hexo"><span class="nav-number">2.1.3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注册Github账号"><span class="nav-number">2.1.4.</span> <span class="nav-text">注册Github账号</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置本地博客"><span class="nav-number">2.2.</span> <span class="nav-text">配置本地博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更改主题"><span class="nav-number">2.3.</span> <span class="nav-text">更改主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Github-Pages"><span class="nav-number">2.4.</span> <span class="nav-text">配置Github Pages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置SSH"><span class="nav-number">2.5.</span> <span class="nav-text">配置SSH</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置本地Hexo"><span class="nav-number">2.6.</span> <span class="nav-text">配置本地Hexo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名解析"><span class="nav-number">3.</span> <span class="nav-text">域名解析</span></a></li></ol></div>
             
 
           </div>
@@ -768,7 +817,7 @@ color="0,0,255" opacity='0.7' zIndex="-2" count="99" src="//cdn.bootcss.com/canv
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共941字</span>
+  <span class="post-count">博客全站共2.2k字</span>
 </div>
         
 
