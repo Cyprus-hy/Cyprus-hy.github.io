@@ -135,7 +135,7 @@
 <meta property="og:site_name" content="贺蕴のBlog">
 <meta property="og:description" content="引入大三上的课真的好多啊，而且专业课难度都不小，各种课程实验、大作业让人头秃，每周末还得去去实验室。感觉最近的压力有点大，还是慢慢来吧，放松心态，just do it! 之前上机器学习课有一个作业就是关于回归树的，所以在这里写篇博客记录一下。 书上和网上所提到的决策树大多都是用来分类的，简单地说就是先进行特征选择，用到的方法主要包括信息增益、增益率与基尼指数；然后再生成决策树；最后为了防止过拟合再">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-24T15:52:51.317Z">
+<meta property="og:updated_time" content="2018-10-24T16:11:30.302Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习之回归决策树">
 <meta name="twitter:description" content="引入大三上的课真的好多啊，而且专业课难度都不小，各种课程实验、大作业让人头秃，每周末还得去去实验室。感觉最近的压力有点大，还是慢慢来吧，放松心态，just do it! 之前上机器学习课有一个作业就是关于回归树的，所以在这里写篇博客记录一下。 书上和网上所提到的决策树大多都是用来分类的，简单地说就是先进行特征选择，用到的方法主要包括信息增益、增益率与基尼指数；然后再生成决策树；最后为了防止过拟合再">
@@ -401,12 +401,24 @@
                 
               
 
-              <time title="创建时间：2018-10-24 20:28:23 / 修改时间：23:52:51" itemprop="dateCreated datePublished" datetime="2018-10-24T20:28:23+08:00">2018-10-24</time>
+              <time title="创建时间：2018-10-24 20:28:23" itemprop="dateCreated datePublished" datetime="2018-10-24T20:28:23+08:00">2018-10-24</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-25 00:11:30" itemprop="dateModified" datetime="2018-10-25T00:11:30+08:00">2018-10-25</time>
               
             
           </span>
@@ -542,7 +554,7 @@
 </tr>
 </tbody>
 </table>
-<p>由于这里只有一个特征，因此j是固定了的，我们再假设分割点s的所有可能取值为(1.5,2.5,3.5…9.5)，对于每一个取值，我们都可以得到相应的划分空间$R_1$与$R_2$，以及对应空间下的输出值$c_m$，也就是空间内所有样本标签的均值。接下来我们进行遍历，计算不同s值下平方误差和，并以误差和最小时的s值作为输入空间的划分。由此，最初的回归树就形成了：即当数据在输入空间$R_1$时输出为$c_1，在输入空间$R_2$时输出为$c_2$。在此基础上，我们对训练集数据进行拟合，并利用残差不断更新回归树，直到预测误差满足条件。</p>
+<p>由于这里只有一个特征，因此j是固定了的，我们再假设分割点s的所有可能取值为(1.5,2.5,3.5…9.5)，对于每一个取值，我们都可以得到相应的划分空间$R_1$与$R_2$，以及对应空间下的输出值$c_m$，也就是空间内所有样本标签的均值。接下来我们进行遍历，计算不同s值下平方误差和，并以误差和最小时的s值作为输入空间的划分。由此，最初的回归树就形成了：即当数据在输入空间$R_1$时输出为$c_1$，在输入空间$R_2$时输出为$c_2$。在此基础上，我们对训练集数据进行拟合，并利用残差不断更新回归树，直到预测误差满足条件。</p>
 <p>对于更具体地求解过程，可以参考<a href="https://cethik.vip/2016/09/21/machineCAST/" target="_blank" rel="noopener">这篇博客</a>。</p>
 <h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>由于我比较懒，因此我就直接用了sklearn库的回归树模型，数据集是datasets自带的波士顿房价数据集。然后我还用<code>pydotplus</code>绘图模块把回归树画了出来，关于pydotplus的安装，可以参考<a href="https://blog.csdn.net/qq_36448051/article/details/81746094" target="_blank" rel="noopener">这篇教程</a>。代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor   <span class="comment"># 导入决策回归树的模型</span></span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_diabetes, load_boston  <span class="comment"># 引入糖尿病数据集与波士顿房价数据集</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error, mean_squared_error, r2_score</span><br><span class="line"><span class="keyword">import</span> pydotplus  <span class="comment"># 引入绘图模块</span></span><br><span class="line"><span class="keyword">from</span> sklearn.externals.six <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> export_graphviz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 引入回归数据集，并分为特征向量与标签向量</span></span><br><span class="line">reg_data = load_boston()</span><br><span class="line"><span class="comment"># reg_data = load_diabetes()</span></span><br><span class="line"><span class="comment"># print(reg_data.DESCR)</span></span><br><span class="line">X = reg_data.data</span><br><span class="line">y = reg_data.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分割数据集，其中80%用做训练，20%用做测试</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=<span class="number">1</span>, test_size=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练决策回归树模型</span></span><br><span class="line">DTR = DecisionTreeRegressor(max_leaf_nodes=<span class="number">6</span>)  <span class="comment"># 回归树的最大叶子数为6</span></span><br><span class="line">DTR.fit(X_train, y_train)</span><br><span class="line">y_predict = DTR.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型可视化</span></span><br><span class="line">dot_data = StringIO()  <span class="comment"># 把文件暂时写在内存的对象中</span></span><br><span class="line">export_graphviz(DTR, out_file=dot_data, feature_names=reg_data.feature_names,</span><br><span class="line">                filled=<span class="keyword">True</span>, rounded=<span class="keyword">True</span>, special_characters=<span class="keyword">True</span>)  <span class="comment"># 利用export_graphviz模块导出回归树</span></span><br><span class="line">graph = pydotplus.graph_from_dot_data(dot_data.getvalue())</span><br><span class="line">graph.write_png(<span class="string">'Boston.png'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型好坏评价</span></span><br><span class="line">print(<span class="string">"回归树的拟合优度为："</span>, r2_score(y_test, y_predict))</span><br><span class="line">print(<span class="string">"预测结果的均方误差为： "</span>, mean_squared_error(y_test, y_predict))</span><br><span class="line">print(<span class="string">"预测结果的平均绝对误差为："</span>, mean_absolute_error(y_test, y_predict))</span><br></pre></td></tr></table></figure>
