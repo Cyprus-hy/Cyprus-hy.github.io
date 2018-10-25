@@ -584,7 +584,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping Cyprus-hy.github.io</span><br></pre></td></tr></table></figure>
 <p>接着我们开始添加这两条记录，如下图的第一条与第四条记录，而第二、三条记录是DNSPod自动生成的，这个会在Godaddy自己的域名服务器上用到：</p>
 <p><img src="http://pgc23xl25.bkt.clouddn.com/blog/181009/C4JH2bC31j.PNG" alt="mark"></p>
-<h3 id="添加CNAME文件"><a href="#添加CNAME文件" class="headerlink" title="添加CNAME文件"></a>添加CNAME文件</h3><p>同时，我们需要在个人博客仓库中添加CNAME文件，在<code>Cyprus-hy.github.io</code>仓库中点击右上角的<code>Create new file</code>，文件名为CNAME，文件内容为<a href="http://www.heyun.life，即对应你自己购买的域名。" target="_blank" rel="noopener">www.heyun.life，即对应你自己购买的域名。</a></p>
+<h3 id="添加CNAME文件"><a href="#添加CNAME文件" class="headerlink" title="添加CNAME文件"></a>添加CNAME文件</h3><p>同时，我们需要在个人博客仓库中添加CNAME文件，在<code>Cyprus-hy.github.io</code>仓库中点击右上角的<code>Create new file</code>，文件名为CNAME，文件内容为www.heyun.life，即对应你自己购买的域名。</p>
 <p>然后我们可以通过Download的方式下载下整个仓库并将CNAME文件放到Hexo\blog\source处。当然，你可以先在本地创建CNAME文件再同步到Github上，但需要注意CNAME文件是没有后缀名的。</p>
 <h3 id="Godaddy配置"><a href="#Godaddy配置" class="headerlink" title="Godaddy配置"></a>Godaddy配置</h3><p>由于Godaddy才是我们域名的管理商，而我们又希望通过DNSPod进行域名解析，因此我们需要将Godady的域名服务器指定为DNSPod的域名地址。这里需要插一句，在购买完域名后，Godaddy会发送邮件进行邮箱认证，如果你注册用的是QQ邮箱，接收到邮件的时间要很久，网易的163邮箱与Gmail会好一些，但也要一段时间，所以耐心等待就好，因为没有验证邮箱的话是无法进行接下来的操作的。</p>
 <p>首先，我们依次点击<code>我的产品</code>-&gt;<code>DNS</code>，如下图：</p>
@@ -1468,7 +1468,24 @@
   
 
   <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
-<script type="text/javascript" src="/js/src/custom.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script type="text/javascript" src="/js/src/custom.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 </html>
