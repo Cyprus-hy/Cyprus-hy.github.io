@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[The-Post-And-Get-Method-of-C#]]></title>
+    <title><![CDATA[C#前端开发之Get与Post方法]]></title>
     <url>%2F2018%2F11%2F05%2FThe-Post-And-Get-Method-of-C%23%2F</url>
     <content type="text"><![CDATA[引入程序实践课的大作业老师让我们用C#写前端，PHP写后端做一个窗体应用程序，然后我和室友就一起做了个体育赛事的报名系统。其中我负责的是前端，这里就简单记录一下C#的Get与Post方法。 首先简单介绍一下，HTTP定义了许多与服务器交互的方法，包括Put、Delete、Get与Post，分别对应增、删、查、改操作。但其中用的最多的就是Post与Get：通常来说，Post多用于更新数据而Get多用于请求数据，且它两都是通过Url进行数据传输的。 Get方法首先我们定义如下的HttpGet函数： 1234567891011121314public string HttpGet(string Url, string postDataStr)&#123; HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == &quot;&quot; ? &quot;&quot; : &quot;?&quot;) + postDataStr); request.Method = &quot;GET&quot;; request.ContentType = &quot;text/html;charset=UTF-8&quot;; HttpWebResponse response = (HttpWebResponse)request.GetResponse(); Stream myResponseStream = response.GetResponseStream(); StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(&quot;utf-8&quot;)); string retString = myStreamReader.ReadToEnd(); myStreamReader.Close(); myResponseStream.Close(); return retString;&#125; 以我编写的从数据库请求用户的个人信息数据为例，我们可以进行如下调用： 12345// 获取个人信息，Common.Login_ID是用户的账号，封装成了共享数据类string URL = &quot;http://localhost/cxsj_final_project-master/Home/User/getInfoByUserID/&quot; + Common.Login_ID;string content = HttpGet(URL, &quot;&quot;);//User是封装的用户信息类，数据以json格式进行传输User resultobj = JsonConvert.DeserializeObject&lt;User&gt;(content); Post方法首先我们定义如下的HttpPost函数： 123456789101112131415161718192021private string HttpPost(string Url, string postDataStr)&#123; HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url); request.Method = &quot;POST&quot;; request.ContentType = &quot;application/x-www-form-urlencoded&quot;; request.ContentLength = Encoding.UTF8.GetByteCount(postDataStr); Stream myRequestStream = request.GetRequestStream(); StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding(&quot;gb2312&quot;)); myStreamWriter.Write(postDataStr); myStreamWriter.Close(); HttpWebResponse response = (HttpWebResponse)request.GetResponse(); Stream myResponseStream = response.GetResponseStream(); StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(&quot;utf-8&quot;)); string retString = myStreamReader.ReadToEnd(); myStreamReader.Close(); myResponseStream.Close(); return retString;&#125; 以我编写的用户登录判断为例，我们可以进行如下调用： 12345678910111213//用户输入账号与密码信息int userID = Convert.ToInt32(inputUser_id.Text);string password = Convert.ToString(inputPwd.Text);//LoginUser是封装的用户登录时的信息类LoginUser newobj = new LoginUser(userID, password);//本地Urlstring PostURL = &quot;http://localhost/cxsj_final_project-master/Home/Log/postLogin&quot;;//转化成json串格式string jsonContent = JsonConvert.SerializeObject(newobj);string Param = &quot;Content=&quot; + jsonContent;//进行Post请求，返回值为是否是管理员以及是否登录成功string result = HttpPost(PostURL, Param);IsLogin resultobj = JsonConvert.DeserializeObject&lt;IsLogin&gt;(result); 总结最近比较忙，就不太想打啥字了，基本意思都表达了，具体的源代码可以看这里。]]></content>
       <categories>
         <category>前端开发</category>
       </categories>
       <tags>
-        <tag>C#前端开发之Get与Post方法 - 前端 - C# - Post - Get</tag>
+        <tag>前端</tag>
+        <tag>C#</tag>
+        <tag>Post</tag>
+        <tag>Get</tag>
       </tags>
   </entry>
   <entry>
