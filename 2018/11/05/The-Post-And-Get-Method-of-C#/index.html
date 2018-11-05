@@ -127,21 +127,25 @@
 
 
 
-  <meta name="keywords" content="计算机 生活 娱乐 马拉松 阅读 旅行">
-<meta property="og:type" content="website">
-<meta property="og:title" content="贺蕴のBlog">
-<meta property="og:url" content="http://www.heyun.life/tags/Hexo/index.html">
+  <meta name="description" content="引入程序实践课的大作业老师让我们用C#写前端，PHP写后端做一个窗体应用程序，然后我和室友就一起做了个体育赛事的报名系统。其中我负责的是前端，这里就简单记录一下C#的Get与Post方法。 首先简单介绍一下，HTTP定义了许多与服务器交互的方法，包括Put、Delete、Get与Post，分别对应增、删、查、改操作。但其中用的最多的就是Post与Get：通常来说，Post多用于更新数据而Get多用">
+<meta name="keywords" content="C#前端开发之Get与Post方法 - 前端 - C# - Post - Get">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The-Post-And-Get-Method-of-C#">
+<meta property="og:url" content="http://www.heyun.life/2018/11/05/The-Post-And-Get-Method-of-C#/index.html">
 <meta property="og:site_name" content="贺蕴のBlog">
+<meta property="og:description" content="引入程序实践课的大作业老师让我们用C#写前端，PHP写后端做一个窗体应用程序，然后我和室友就一起做了个体育赛事的报名系统。其中我负责的是前端，这里就简单记录一下C#的Get与Post方法。 首先简单介绍一下，HTTP定义了许多与服务器交互的方法，包括Put、Delete、Get与Post，分别对应增、删、查、改操作。但其中用的最多的就是Post与Get：通常来说，Post多用于更新数据而Get多用">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-05T12:58:38.038Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="贺蕴のBlog">
+<meta name="twitter:title" content="The-Post-And-Get-Method-of-C#">
+<meta name="twitter:description" content="引入程序实践课的大作业老师让我们用C#写前端，PHP写后端做一个窗体应用程序，然后我和室友就一起做了个体育赛事的报名系统。其中我负责的是前端，这里就简单记录一下C#的Get与Post方法。 首先简单介绍一下，HTTP定义了许多与服务器交互的方法，包括Put、Delete、Get与Post，分别对应增、删、查、改操作。但其中用的最多的就是Post与Get：通常来说，Post多用于更新数据而Get多用">
 
 
 
 
 
 
-  <link rel="canonical" href="http://www.heyun.life/tags/Hexo/"/>
+  <link rel="canonical" href="http://www.heyun.life/2018/11/05/The-Post-And-Get-Method-of-C#/"/>
 
 
 
@@ -151,7 +155,7 @@
   };
 </script>
 
-  <title>标签: Hexo | 贺蕴のBlog</title>
+  <title>The-Post-And-Get-Method-of-C# | 贺蕴のBlog</title>
   
 
 
@@ -198,7 +202,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -255,7 +259,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
     <a href="/tags/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
@@ -335,84 +339,312 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>Hexo<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.heyun.life/2018/11/05/The-Post-And-Get-Method-of-C#/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="贺蕴">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://pgc23xl25.bkt.clouddn.com/blog/181009/a7I2C3k6JK.jpg?imageslim">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贺蕴のBlog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/10/05/Tips-for-Building-Personal-Blog/" itemprop="url">
-              
-                <span itemprop="name">搭建个人博客的简易教程</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">The-Post-And-Get-Method-of-C#
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-05T14:18:37+08:00"
-              content="2018-10-05" >
-          10-05
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-05 20:04:31 / 修改时间：20:58:38" itemprop="dateCreated datePublished" datetime="2018-11-05T20:04:31+08:00">2018-11-05</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端开发/" itemprop="url" rel="index"><span itemprop="name">前端开发</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">5 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>程序实践课的大作业老师让我们用C#写前端，PHP写后端做一个窗体应用程序，然后我和室友就一起做了个体育赛事的报名系统。其中我负责的是前端，这里就简单记录一下C#的Get与Post方法。</p>
+<p>首先简单介绍一下，HTTP定义了许多与服务器交互的方法，包括Put、Delete、Get与Post，分别对应增、删、查、改操作。但其中用的最多的就是Post与Get：通常来说，Post多用于更新数据而Get多用于请求数据，且它两都是通过Url进行数据传输的。</p>
+<a id="more"></a>
+<h2 id="Get方法"><a href="#Get方法" class="headerlink" title="Get方法"></a>Get方法</h2><p>首先我们定义如下的HttpGet函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public string HttpGet(string Url, string postDataStr)</span><br><span class="line">&#123;</span><br><span class="line">    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url + (postDataStr == &quot;&quot; ? &quot;&quot; : &quot;?&quot;) + postDataStr);</span><br><span class="line">    request.Method = &quot;GET&quot;;</span><br><span class="line">    request.ContentType = &quot;text/html;charset=UTF-8&quot;;</span><br><span class="line"></span><br><span class="line">    HttpWebResponse response = (HttpWebResponse)request.GetResponse();</span><br><span class="line">    Stream myResponseStream = response.GetResponseStream();</span><br><span class="line">    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(&quot;utf-8&quot;));</span><br><span class="line">    string retString = myStreamReader.ReadToEnd();</span><br><span class="line">    myStreamReader.Close();</span><br><span class="line">    myResponseStream.Close();</span><br><span class="line">    return retString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以我编写的从数据库请求用户的个人信息数据为例，我们可以进行如下调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 获取个人信息，Common.Login_ID是用户的账号，封装成了共享数据类</span><br><span class="line">string URL = &quot;http://localhost/cxsj_final_project-master/Home/User/getInfoByUserID/&quot; + Common.Login_ID;</span><br><span class="line">string content = HttpGet(URL, &quot;&quot;);</span><br><span class="line">//User是封装的用户信息类，数据以json格式进行传输</span><br><span class="line">User resultobj = JsonConvert.DeserializeObject&lt;User&gt;(content);</span><br></pre></td></tr></table></figure>
+<h2 id="Post方法"><a href="#Post方法" class="headerlink" title="Post方法"></a>Post方法</h2><p>首先我们定义如下的HttpPost函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private string HttpPost(string Url, string postDataStr)</span><br><span class="line">&#123;</span><br><span class="line">	HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Url);</span><br><span class="line">    request.Method = &quot;POST&quot;;</span><br><span class="line">    request.ContentType = &quot;application/x-www-form-urlencoded&quot;;</span><br><span class="line">    request.ContentLength = Encoding.UTF8.GetByteCount(postDataStr);</span><br><span class="line">    Stream myRequestStream = request.GetRequestStream();</span><br><span class="line">    StreamWriter myStreamWriter = new StreamWriter(myRequestStream, Encoding.GetEncoding(&quot;gb2312&quot;));</span><br><span class="line">    myStreamWriter.Write(postDataStr);</span><br><span class="line">    myStreamWriter.Close();</span><br><span class="line"></span><br><span class="line">    HttpWebResponse response = (HttpWebResponse)request.GetResponse();</span><br><span class="line"></span><br><span class="line">    Stream myResponseStream = response.GetResponseStream();</span><br><span class="line">    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding(&quot;utf-8&quot;));</span><br><span class="line">    string retString = myStreamReader.ReadToEnd();</span><br><span class="line">    myStreamReader.Close();</span><br><span class="line">    myResponseStream.Close();</span><br><span class="line"></span><br><span class="line">    return retString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以我编写的用户登录判断为例，我们可以进行如下调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//用户输入账号与密码信息</span><br><span class="line">int userID = Convert.ToInt32(inputUser_id.Text);</span><br><span class="line">string password = Convert.ToString(inputPwd.Text);</span><br><span class="line">//LoginUser是封装的用户登录时的信息类</span><br><span class="line">LoginUser newobj = new LoginUser(userID, password);</span><br><span class="line">//本地Url</span><br><span class="line">string PostURL = &quot;http://localhost/cxsj_final_project-master/Home/Log/postLogin&quot;;</span><br><span class="line">//转化成json串格式</span><br><span class="line">string jsonContent = JsonConvert.SerializeObject(newobj);</span><br><span class="line">string Param = &quot;Content=&quot; + jsonContent;</span><br><span class="line">//进行Post请求，返回值为是否是管理员以及是否登录成功</span><br><span class="line">string result = HttpPost(PostURL, Param);</span><br><span class="line">IsLogin resultobj = JsonConvert.DeserializeObject&lt;IsLogin&gt;(result);</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最近比较忙，就不太想打啥字了，基本意思都表达了，具体的源代码可以看<a href="https://github.com/Cyprus-hy/CXSJ_Project" target="_blank" rel="noopener">这里</a>。</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">---------------本文结束<i class="fa fa-paw"></i>感谢您的阅读---------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>----------此处弱弱求打赏*٩(๑´∀`๑)ง*----------</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="http://pgc23xl25.bkt.clouddn.com/blog/181009/bGKK6F13Aa.jpg?imageslim" alt="贺蕴 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="http://pgc23xl25.bkt.clouddn.com/blog/181009/kA14bGK2H5.jpg?imageslim" alt="贺蕴 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>贺蕴</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.heyun.life/2018/11/05/The-Post-And-Get-Method-of-C#/" title="The-Post-And-Get-Method-of-C#">http://www.heyun.life/2018/11/05/The-Post-And-Get-Method-of-C#/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-前端开发之Get与Post方法-前端-C-Post-Get/" rel="tag"><i class="fa fa-tag"></i> C#前端开发之Get与Post方法 - 前端 - C# - Post - Get</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+               <div id="needsharebutton-postbottom">
+                 <span class="btn">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                 </span>
+               </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/24/The-DesionTreeRegressor-of-Machine-Learning/" rel="next" title="机器学习之回归决策树">
+                <i class="fa fa-chevron-left"></i> 机器学习之回归决策树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -433,8 +665,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -551,6 +792,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引入"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Get方法"><span class="nav-number">2.</span> <span class="nav-text">Get方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Post方法"><span class="nav-number">3.</span> <span class="nav-text">Post方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -715,6 +972,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
 
   
 
