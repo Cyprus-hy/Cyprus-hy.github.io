@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://pgc23xl25.bkt.clouddn.com/blog/181009/a7I2C3k6JK.jpg?imageslim?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://pgc23xl25.bkt.clouddn.com/blog/181009/a7I2C3k6JK.jpg?imageslim?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://pgc23xl25.bkt.clouddn.com/blog/181009/a7I2C3k6JK.jpg?imageslim?v=6.4.2">
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="引言今年上半年的时候和小伙伴一起申了个国创项目，做的是用深度学习（神经网络）来检测驾驶员的异常行为。简单点说就是驾驶员在驾驶的时候可能会有抽烟、喝水、打电话等等违规行为，这些行为都在一定程度上降低了服务体验与安全风险，我们要做的就是及时监测这些异常行为并给出反馈。目前我们已经做到了对驾驶员打电话与喝水这两种异常行为以及正常驾驶的监测，用到的技术栈是Faster RCNN，这篇博客就是为了记录下具体">
+<meta name="keywords" content="Faster RCNN,人脸检测,神经网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用Faster RCNN实现对驾驶员的异常行为监测">
+<meta property="og:url" content="http://www.heyun.life/2018/12/02/Monitor-The-Driver-By-Faster-RCNN/index.html">
+<meta property="og:site_name" content="贺蕴のBlog">
+<meta property="og:description" content="引言今年上半年的时候和小伙伴一起申了个国创项目，做的是用深度学习（神经网络）来检测驾驶员的异常行为。简单点说就是驾驶员在驾驶的时候可能会有抽烟、喝水、打电话等等违规行为，这些行为都在一定程度上降低了服务体验与安全风险，我们要做的就是及时监测这些异常行为并给出反馈。目前我们已经做到了对驾驶员打电话与喝水这两种异常行为以及正常驾驶的监测，用到的技术栈是Faster RCNN，这篇博客就是为了记录下具体">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-08T07:31:17.420Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用Faster RCNN实现对驾驶员的异常行为监测">
+<meta name="twitter:description" content="引言今年上半年的时候和小伙伴一起申了个国创项目，做的是用深度学习（神经网络）来检测驾驶员的异常行为。简单点说就是驾驶员在驾驶的时候可能会有抽烟、喝水、打电话等等违规行为，这些行为都在一定程度上降低了服务体验与安全风险，我们要做的就是及时监测这些异常行为并给出反馈。目前我们已经做到了对驾驶员打电话与喝水这两种异常行为以及正常驾驶的监测，用到的技术栈是Faster RCNN，这篇博客就是为了记录下具体">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.heyun.life/2018/12/02/Monitor-The-Driver-By-Faster-RCNN/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>利用Faster RCNN实现对驾驶员的异常行为监测 | 贺蕴のBlog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">贺蕴のBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">Excellence is for the few but dedication is something everybody can have!</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.heyun.life/2018/12/02/Monitor-The-Driver-By-Faster-RCNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="贺蕴">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://pgc23xl25.bkt.clouddn.com/blog/181009/a7I2C3k6JK.jpg?imageslim">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="贺蕴のBlog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">利用Faster RCNN实现对驾驶员的异常行为监测
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-02 15:11:19" itemprop="dateCreated datePublished" datetime="2018-12-02T15:11:19+08:00">2018-12-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-08 15:31:17" itemprop="dateModified" datetime="2018-12-08T15:31:17+08:00">2018-12-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Faster-RCNN实操/" itemprop="url" rel="index"><span itemprop="name">Faster RCNN实操</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">13k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">23 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>今年上半年的时候和小伙伴一起申了个国创项目，做的是用深度学习（神经网络）来检测驾驶员的异常行为。简单点说就是驾驶员在驾驶的时候可能会有抽烟、喝水、打电话等等违规行为，这些行为都在一定程度上降低了服务体验与安全风险，我们要做的就是及时监测这些异常行为并给出反馈。目前我们已经做到了对驾驶员打电话与喝水这两种异常行为以及正常驾驶的监测，用到的技术栈是<strong>Faster RCNN</strong>，这篇博客就是为了记录下具体的实现过程。</p>
+<a id="more"></a>
+<h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><p>我们用的环境是GTX1060显卡+Ubuntu18.04系统+CUDAA8.0+CUDNN5.1.10+CAFFE。安装过程真的是一言难尽，反正我装的时候显卡驱动和CAFFE老是报各种错，后来都是小伙伴帮忙装上的，大家可以参考他的<a href="https://saladcat.github.io/" target="_blank" rel="noopener">教程</a>。</p>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p>环境配好了（反正我自己是配不来，狗头）以后，就可以开始实现了，大致分成数据预处理、人脸识别、模型训练与测试这几部分，下面逐一介绍。</p>
+<h3 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h3><p>我们的数据集主要是驾驶员在驾驶时的行为视频，老师给了一些，但很有限，所以我们又模拟驾驶环境自己拍了一些，首先把视频分割成一帧一帧的图像，代码如下（python xxx.py）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os.path</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">videos_src_path = <span class="string">"/home/yue/code/face-py-faster-rcnn/data/testvideo"</span></span><br><span class="line">pathDir = os.listdir(videos_src_path)</span><br><span class="line"></span><br><span class="line">a = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> allDir <span class="keyword">in</span> pathDir:</span><br><span class="line">    videopath = os.path.join(videos_src_path,allDir)</span><br><span class="line">    <span class="comment">#print allDir</span></span><br><span class="line">    vc = cv2.VideoCapture(videopath)</span><br><span class="line">    c = <span class="number">1</span></span><br><span class="line">    rval, frame = vc.read()</span><br><span class="line"></span><br><span class="line">    timeF = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> rval:</span><br><span class="line">        rval, frame = vc.read()</span><br><span class="line">        <span class="keyword">if</span> (c % timeF == <span class="number">0</span> <span class="keyword">and</span> rval):</span><br><span class="line">            cv2.imwrite(<span class="string">"/home/yue/code/face-py-faster-rcnn/data/testphoto/"</span> + str(a) + <span class="string">'.jpg'</span>, frame)</span><br><span class="line">            <span class="comment">#image=cv2.imread(str(a)+'.jpg')</span></span><br><span class="line">            <span class="comment">#cv2.resize(image, (960, 660), interpolation=cv2.INTER_CUBIC)</span></span><br><span class="line"></span><br><span class="line">            a = a + <span class="number">1</span></span><br><span class="line">        c = c + <span class="number">1</span></span><br><span class="line">        cv2.waitKey(<span class="number">1</span>)</span><br><span class="line">    vc.release()</span><br></pre></td></tr></table></figure>
+<p>为了模型训练的方便，我们再将图片重命名成VOC2007的格式，也就是六位数字：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cur_dir = os.getcwd()</span><br><span class="line">    dest = os.path.join(cur_dir, <span class="string">"PicsTxt"</span>, <span class="string">"driver.txt"</span>)</span><br><span class="line">    src = os.path.join(cur_dir, <span class="string">"OrignalPics"</span>)</span><br><span class="line"></span><br><span class="line">    imgs = glob.glob(os.path.join(src, <span class="string">"*.jpg"</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> index, item <span class="keyword">in</span> enumerate(imgs):</span><br><span class="line">        os.rename(item, os.path.join(src, <span class="string">"%06d.jpg"</span> % index))</span><br></pre></td></tr></table></figure>
+<p>接着把所有图片名写入driver.txt文档中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cur_dir = os.getcwd()</span><br><span class="line">    dest = os.path.join(cur_dir, <span class="string">"PicsTxt"</span>, <span class="string">"driver.txt"</span>)</span><br><span class="line">    src = os.path.join(cur_dir, <span class="string">"OrignalPics"</span>)</span><br><span class="line"></span><br><span class="line">    imgs = glob.glob(os.path.join(src, <span class="string">"*.jpg"</span>))</span><br><span class="line">    <span class="keyword">with</span> open(dest, <span class="string">"w+"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> index, item <span class="keyword">in</span> enumerate(imgs):</span><br><span class="line">            (_, tempfilename) = os.path.split(item)</span><br><span class="line">            (filename, _) = os.path.splitext(tempfilename)</span><br><span class="line">            f.write(filename + <span class="string">'\n'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="驾驶员人脸检测"><a href="#驾驶员人脸检测" class="headerlink" title="驾驶员人脸检测"></a>驾驶员人脸检测</h3><p>传统意义上的目标分类问题都是先把数据集的目标框出来再打标签（label），这样费时费力，所以我们做了一个改进就是<strong>先通过人脸识别网络(face-py-faster-rcnn)将人脸识别出来再手动打上标签</strong>，因为驾驶员的异常行为大多发生在脸部周围嘛，实际操作的时候只需要将人脸框图适当放大即可。跑一下人脸识别网络：python tools/get_face.py —gpu=0，然后将生成的人脸信息写入txt文件（face、框的坐标等）。这里贴一下get_face的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">import</span> _init_paths</span><br><span class="line"><span class="keyword">from</span> fast_rcnn.config <span class="keyword">import</span> cfg</span><br><span class="line"><span class="keyword">from</span> fast_rcnn.test <span class="keyword">import</span> im_detect</span><br><span class="line"><span class="keyword">from</span> fast_rcnn.nms_wrapper <span class="keyword">import</span> nms</span><br><span class="line"><span class="keyword">from</span> utils.timer <span class="keyword">import</span> Timer</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> scipy.io <span class="keyword">as</span> sio</span><br><span class="line"><span class="keyword">import</span> caffe, os, sys, cv2</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line">NETS = &#123;<span class="string">'vgg16'</span>: (<span class="string">'VGG16'</span>,</span><br><span class="line">                  <span class="string">'output/faster_rcnn_end2end/train/vgg16_faster_rcnn_iter_80000.caffemodel'</span>)&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_imdb_fddb</span><span class="params">(data_dir)</span>:</span>  <span class="comment"># input images</span></span><br><span class="line">    imdb = []</span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    nfold = 10</span></span><br><span class="line"><span class="string">    for n in xrange(nfold):</span></span><br><span class="line"><span class="string">        file_name = 'FDDB-folds/FDDB-fold-%02d.txt' % (n + 1)</span></span><br><span class="line"><span class="string">        file_name = os.path.join(data_dir, file_name)</span></span><br><span class="line"><span class="string">        fid = open(file_name, 'r')</span></span><br><span class="line"><span class="string">        image_names = []</span></span><br><span class="line"><span class="string">        for im_name in fid:</span></span><br><span class="line"><span class="string">            image_names.append(im_name.strip('\n'))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        imdb.append(image_names)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    file_name = <span class="string">'PicsTxt/driver.txt'</span></span><br><span class="line">    file_name = os.path.join(data_dir, file_name)</span><br><span class="line">    fid = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">    image_names = []</span><br><span class="line">    <span class="keyword">for</span> im_name <span class="keyword">in</span> fid:</span><br><span class="line">        image_names.append(im_name.strip(<span class="string">'\n'</span>))</span><br><span class="line"></span><br><span class="line">    imdb.append(image_names)</span><br><span class="line">    <span class="keyword">return</span> imdb</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vis_detections</span><span class="params">(im, class_name, dets, thresh=<span class="number">0.5</span>)</span>:</span></span><br><span class="line">    <span class="string">"""Draw detected bounding boxes."""</span></span><br><span class="line">    inds = np.where(dets[:, <span class="number">-1</span>] &gt;= thresh)[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">if</span> len(inds) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    im = im[:, :, (<span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>)]</span><br><span class="line">    fig, ax = plt.subplots(figsize=(<span class="number">12</span>, <span class="number">12</span>))</span><br><span class="line">    ax.imshow(im, aspect=<span class="string">'equal'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> inds:</span><br><span class="line">        bbox = dets[i, :<span class="number">4</span>]</span><br><span class="line">        score = dets[i, <span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">        ax.add_patch(</span><br><span class="line">            plt.Rectangle((bbox[<span class="number">0</span>], bbox[<span class="number">1</span>]),</span><br><span class="line">                          bbox[<span class="number">2</span>] - bbox[<span class="number">0</span>],</span><br><span class="line">                          bbox[<span class="number">3</span>] - bbox[<span class="number">1</span>], fill=<span class="keyword">False</span>,</span><br><span class="line">                          edgecolor=<span class="string">'red'</span>, linewidth=<span class="number">3.5</span>)</span><br><span class="line">        )</span><br><span class="line">        ax.text(bbox[<span class="number">0</span>], bbox[<span class="number">1</span>] - <span class="number">2</span>,</span><br><span class="line">                <span class="string">'&#123;:s&#125; &#123;:.3f&#125;'</span>.format(class_name, score),</span><br><span class="line">                bbox=dict(facecolor=<span class="string">'blue'</span>, alpha=<span class="number">0.5</span>),</span><br><span class="line">                fontsize=<span class="number">14</span>, color=<span class="string">'white'</span>)</span><br><span class="line"></span><br><span class="line">    ax.set_title((<span class="string">'&#123;&#125; detections with '</span></span><br><span class="line">                  <span class="string">'p(&#123;&#125; | box) &gt;= &#123;:.1f&#125;'</span>).format(class_name, class_name,</span><br><span class="line">                                                  thresh),</span><br><span class="line">                 fontsize=<span class="number">14</span>)</span><br><span class="line">    plt.axis(<span class="string">'off'</span>)</span><br><span class="line">    plt.tight_layout()</span><br><span class="line">    plt.draw()</span><br><span class="line">    <span class="comment"># plt.show()</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_args</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""Parse input arguments."""</span></span><br><span class="line">    parser = argparse.ArgumentParser(description=<span class="string">'Face Detection using Faster R-CNN'</span>)</span><br><span class="line">    parser.add_argument(<span class="string">'--gpu'</span>, dest=<span class="string">'gpu_id'</span>, help=<span class="string">'GPU device id to use [0]'</span>,</span><br><span class="line">                        default=<span class="number">0</span>, type=int)</span><br><span class="line">    parser.add_argument(<span class="string">'--cpu'</span>, dest=<span class="string">'cpu_mode'</span>,</span><br><span class="line">                        help=<span class="string">'Use CPU mode (overrides --gpu)'</span>,</span><br><span class="line">                        action=<span class="string">'store_true'</span>)</span><br><span class="line">    parser.add_argument(<span class="string">'--net'</span>, dest=<span class="string">'demo_net'</span>, help=<span class="string">'Network to use [vgg16]'</span>,</span><br><span class="line">                        choices=NETS.keys(), default=<span class="string">'vgg16'</span>)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> args</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">obtain_face</span><span class="params">()</span>:</span></span><br><span class="line">    cfg.TEST.HAS_RPN = <span class="keyword">True</span>  <span class="comment"># Use RPN for proposals</span></span><br><span class="line">    <span class="comment"># cfg.TEST.BBOX_REG = False</span></span><br><span class="line"></span><br><span class="line">    args = parse_args()</span><br><span class="line"></span><br><span class="line">    prototxt = os.path.join(cfg.MODELS_DIR, NETS[args.demo_net][<span class="number">0</span>],</span><br><span class="line">                            <span class="string">'faster_rcnn_alt_opt'</span>, <span class="string">'faster_rcnn_test.pt'</span>)</span><br><span class="line">    caffemodel = os.path.join(cfg.DATA_DIR, <span class="string">'faster_rcnn_models'</span>,</span><br><span class="line">                              NETS[args.demo_net][<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    prototxt = <span class="string">'models/face/VGG16/faster_rcnn_end2end/test.prototxt'</span></span><br><span class="line">    caffemodel = NETS[args.demo_net][<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.isfile(caffemodel):</span><br><span class="line">        <span class="keyword">raise</span> IOError((<span class="string">'&#123;:s&#125; not found.\nDid you run ./data/script/'</span></span><br><span class="line">                       <span class="string">'fetch_faster_rcnn_models.sh?'</span>).format(caffemodel))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> args.cpu_mode:</span><br><span class="line">        caffe.set_mode_cpu()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        caffe.set_mode_gpu()</span><br><span class="line">        caffe.set_device(args.gpu_id)</span><br><span class="line">        cfg.GPU_ID = args.gpu_id</span><br><span class="line">    net = caffe.Net(prototxt, caffemodel, caffe.TEST)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'\n\nLoaded network &#123;:s&#125;'</span>.format(caffemodel))</span><br><span class="line"></span><br><span class="line">    data_dir = <span class="string">'data/Driver/'</span></span><br><span class="line">    out_dir = <span class="string">'output/Result/res_txt/'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(out_dir):</span><br><span class="line">        os.makedirs(out_dir)</span><br><span class="line"></span><br><span class="line">    CONF_THRESH = <span class="number">0.65</span></span><br><span class="line">    NMS_THRESH = <span class="number">0.15</span></span><br><span class="line"></span><br><span class="line">    imdb = get_imdb_fddb(data_dir)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Warmup on a dummy image</span></span><br><span class="line">    im = <span class="number">128</span> * np.ones((<span class="number">300</span>, <span class="number">500</span>, <span class="number">3</span>), dtype=np.uint8)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">2</span>):</span><br><span class="line">        _, _ = im_detect(net, im)</span><br><span class="line"></span><br><span class="line">    nfold = len(imdb)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(nfold):</span><br><span class="line">        image_names = imdb[i]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># detection file</span></span><br><span class="line">        <span class="comment"># dets_file_name = os.path.join(out_dir, 'FDDB-test-res.txt')</span></span><br><span class="line">        <span class="comment"># fid = open(dets_file_name, 'w')</span></span><br><span class="line">        <span class="comment"># sys.stdout.write('%s ' % (i + 1))</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> idx, im_name <span class="keyword">in</span> enumerate(image_names):</span><br><span class="line">            <span class="comment"># timer = Timer()</span></span><br><span class="line">            <span class="comment"># timer.tic()</span></span><br><span class="line"></span><br><span class="line">            dets_file_name = os.path.join(out_dir, <span class="string">'%s.txt'</span> % im_name)</span><br><span class="line">            fid = open(dets_file_name, <span class="string">'w'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Load the demo image</span></span><br><span class="line">            mat_name = im_name + <span class="string">'.mat'</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># im_path = im_name + '.jpg'</span></span><br><span class="line">            im = cv2.imread(os.path.join(data_dir, <span class="string">'OrignalPics'</span>, im_name + <span class="string">'.jpg'</span>))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># # Detect all object classes and regress object bounds</span></span><br><span class="line">            <span class="comment"># timer = Timer()</span></span><br><span class="line">            <span class="comment"># timer.tic()</span></span><br><span class="line">            scores, boxes = im_detect(net, im)</span><br><span class="line">            <span class="comment"># timer.toc()</span></span><br><span class="line">            <span class="comment"># print ('Detection took &#123;:.3f&#125;s for '</span></span><br><span class="line">            <span class="comment">#        '&#123;:d&#125; object proposals').format(timer.total_time, boxes.shape[0])</span></span><br><span class="line"></span><br><span class="line">            cls_ind = <span class="number">1</span></span><br><span class="line">            cls_boxes = boxes[:, <span class="number">4</span> * cls_ind:<span class="number">4</span> * (cls_ind + <span class="number">1</span>)]</span><br><span class="line">            cls_scores = scores[:, cls_ind]</span><br><span class="line">            dets = np.hstack((cls_boxes,</span><br><span class="line">                              cls_scores[:, np.newaxis])).astype(np.float32)</span><br><span class="line">            keep = nms(dets, NMS_THRESH)</span><br><span class="line">            dets = dets[keep, :]</span><br><span class="line"></span><br><span class="line">            keep = np.where(dets[:, <span class="number">4</span>] &gt; CONF_THRESH)</span><br><span class="line">            dets = dets[keep]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># vis_detections(im, 'face', dets, CONF_THRESH)</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># dets[:, 2] = dets[:, 2] - dets[:, 0] + 1</span></span><br><span class="line">            <span class="comment"># dets[:, 3] = dets[:, 3] - dets[:, 1] + 1</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># timer.toc()</span></span><br><span class="line">            <span class="comment"># print ('Detection took &#123;:.3f&#125;s for '</span></span><br><span class="line">            <span class="comment">#        '&#123;:d&#125; object proposals').format(timer.total_time, boxes.shape[0])</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># fid.write(im_name + '\n')</span></span><br><span class="line">            <span class="comment"># fid.write(str(dets.shape[0]) + '\n')</span></span><br><span class="line">            cls = <span class="string">'face'</span></span><br><span class="line">            shape = im.shape</span><br><span class="line">            h = shape[<span class="number">0</span>]</span><br><span class="line">            w = shape[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> xrange(dets.shape[<span class="number">0</span>]):</span><br><span class="line">                fid.write(<span class="string">'%d %d %d %d %s\n'</span> % (</span><br><span class="line">                round(dets[j, <span class="number">0</span>]-w/<span class="number">20</span>), round(dets[j, <span class="number">1</span>]-h/<span class="number">30</span>), round(dets[j, <span class="number">2</span>]+w/<span class="number">20</span>), round(dets[j, <span class="number">3</span>]+h/<span class="number">20</span>), cls))</span><br><span class="line"></span><br><span class="line">            <span class="string">'''</span></span><br><span class="line"><span class="string">            if ((idx + 1) % 10) == 0:</span></span><br><span class="line"><span class="string">                sys.stdout.write('%.3f ' % ((idx + 1) / len(image_names) * 100))</span></span><br><span class="line"><span class="string">                sys.stdout.flush()</span></span><br><span class="line"><span class="string">            '''</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># print</span></span><br><span class="line">            <span class="comment"># ''</span></span><br><span class="line">            fid.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    obtain_face()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># os.system('cp ./fddb_res/*.txt ~/Code/FDDB/results')</span></span><br></pre></td></tr></table></figure>
+<p>由于生成的框图坐标需要用XML的格式存储，所以我们转一下格式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#! /usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:UTF-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> os, sys</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="comment"># 图像存储位置</span></span><br><span class="line">src_img_dir = <span class="string">"/home/yue/code/face-py-faster-rcnn/data/Driver/OrignalPics"</span></span><br><span class="line"><span class="comment"># 图像的 ground truth 的 txt 文件存放位置</span></span><br><span class="line">src_txt_dir = <span class="string">"/home/yue/code/face-py-faster-rcnn/output/Result/res_txt"</span></span><br><span class="line">src_xml_dir = <span class="string">"/home/yue/code/face-py-faster-rcnn/output/Result/res_xml"</span></span><br><span class="line"></span><br><span class="line">img_Lists = glob.glob(src_img_dir + <span class="string">'/*.jpg'</span>)</span><br><span class="line"></span><br><span class="line">img_basenames = [] <span class="comment"># e.g. 100.jpg</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> img_Lists:</span><br><span class="line">    img_basenames.append(os.path.basename(item))</span><br><span class="line"></span><br><span class="line">img_names = [] <span class="comment"># e.g. 100</span></span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> img_basenames:</span><br><span class="line">    temp1, temp2 = os.path.splitext(item)</span><br><span class="line">    img_names.append(temp1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> img <span class="keyword">in</span> img_names:</span><br><span class="line">    im = Image.open((src_img_dir + <span class="string">'/'</span> + img + <span class="string">'.jpg'</span>))</span><br><span class="line">    width, height = im.size</span><br><span class="line"></span><br><span class="line">    <span class="comment"># open the crospronding txt file</span></span><br><span class="line">    gt = open(src_txt_dir + <span class="string">'/'</span> + img + <span class="string">'.txt'</span>).read().splitlines()</span><br><span class="line">    <span class="comment">#gt = open(src_txt_dir + '/gt_' + img + '.txt').read().splitlines()</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># write in xml file</span></span><br><span class="line">    <span class="comment">#os.mknod(src_xml_dir + '/' + img + '.xml')</span></span><br><span class="line">    xml_file = open((src_xml_dir + <span class="string">'/'</span> + img + <span class="string">'.xml'</span>), <span class="string">'w'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'&lt;annotation&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'    &lt;folder&gt;Driver&lt;/folder&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'    &lt;filename&gt;'</span> + str(img) + <span class="string">'.jpg'</span> + <span class="string">'&lt;/filename&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'    &lt;size&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'        &lt;width&gt;'</span> + str(width) + <span class="string">'&lt;/width&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'        &lt;height&gt;'</span> + str(height) + <span class="string">'&lt;/height&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'        &lt;depth&gt;3&lt;/depth&gt;\n'</span>)</span><br><span class="line">    xml_file.write(<span class="string">'    &lt;/size&gt;\n'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># write the region of image on xml file</span></span><br><span class="line">    <span class="keyword">for</span> img_each_label <span class="keyword">in</span> gt:</span><br><span class="line">        spt = img_each_label.split(<span class="string">' '</span>) <span class="comment">#这里如果txt里面是以逗号‘，’隔开的，那么就改为spt = img_each_label.split(',')。</span></span><br><span class="line">        xml_file.write(<span class="string">'    &lt;object&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'        &lt;name&gt;'</span> + str(spt[<span class="number">4</span>]) + <span class="string">'&lt;/name&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'        &lt;pose&gt;Unspecified&lt;/pose&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'        &lt;truncated&gt;0&lt;/truncated&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'        &lt;difficult&gt;0&lt;/difficult&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'        &lt;bndbox&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'            &lt;xmin&gt;'</span> + str(spt[<span class="number">0</span>]) + <span class="string">'&lt;/xmin&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'            &lt;ymin&gt;'</span> + str(spt[<span class="number">1</span>]) + <span class="string">'&lt;/ymin&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'            &lt;xmax&gt;'</span> + str(spt[<span class="number">2</span>]) + <span class="string">'&lt;/xmax&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'            &lt;ymax&gt;'</span> + str(spt[<span class="number">3</span>]) + <span class="string">'&lt;/ymax&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'        &lt;/bndbox&gt;\n'</span>)</span><br><span class="line">        xml_file.write(<span class="string">'    &lt;/object&gt;\n'</span>)</span><br><span class="line"></span><br><span class="line">    xml_file.write(<span class="string">'&lt;/annotation&gt;'</span>)</span><br></pre></td></tr></table></figure>
+<p>可以看一下实际生成的XML文件：</p>
+<p>最后自然就是给数据集打上标签了（还是挺烦的orz）。</p>
+<h3 id="模型训练与测试"><a href="#模型训练与测试" class="headerlink" title="模型训练与测试"></a>模型训练与测试</h3><p>到这里所有的准备工作已经完成了，接下来就是跑py-faster-rcnn了，大致分为以下几个步骤：</p>
+<ul>
+<li>训练图片放JPEGImages文件夹，xml放Annotations文件夹</li>
+<li>ImageSets\Main放四个txt文件，里面是分割的训练验证集与测试集（图片名，不含.jpg），参考<a href="https://blog.csdn.net/sinat_30071459/article/details/50723212" target="_blank" rel="noopener">这个</a></li>
+<li>copy下py-faster-rcnn，对代码一些地方做修改，主要是分类的类别数（<a href="https://blog.csdn.net/sinat_30071459/article/details/51332084" target="_blank" rel="noopener">参考网址</a>）</li>
+<li>训练报assert（boxes[:,2]&gt;=boxes[:,0]）.all()的错可以参考<a href="https://blog.csdn.net/xzzppp/article/details/52036794" target="_blank" rel="noopener">这个</a></li>
+<li>用zf训练模型（./experiments/scripts/faster_rcnn_alt_opt.sh 0 ZF pascal_voc）</li>
+<li>测试模型：把要测试的视频分割成图片，修改一下tools/demo.py里的图片地址以及图片张数</li>
+<li>把测试后保存的图片重新合成视频</li>
+</ul>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>目前做的东西大致就是这么多啦，考完试后还会和小伙伴就目标追踪算法、司机身份识别等做一些优化。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">---------------本文结束<i class="fa fa-paw"></i>感谢您的阅读---------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>----------此处弱弱求打赏*٩(๑´∀`๑)ง*----------</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="http://pgc23xl25.bkt.clouddn.com/blog/181009/bGKK6F13Aa.jpg?imageslim" alt="贺蕴 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="http://pgc23xl25.bkt.clouddn.com/blog/181009/kA14bGK2H5.jpg?imageslim" alt="贺蕴 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>贺蕴</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.heyun.life/2018/12/02/Monitor-The-Driver-By-Faster-RCNN/" title="利用Faster RCNN实现对驾驶员的异常行为监测">http://www.heyun.life/2018/12/02/Monitor-The-Driver-By-Faster-RCNN/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Faster-RCNN/" rel="tag"><i class="fa fa-tag"></i> Faster RCNN</a>
+          
+            <a href="/tags/人脸检测/" rel="tag"><i class="fa fa-tag"></i> 人脸检测</a>
+          
+            <a href="/tags/神经网络/" rel="tag"><i class="fa fa-tag"></i> 神经网络</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+               <div id="needsharebutton-postbottom">
+                 <span class="btn">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                 </span>
+               </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/05/The-Post-And-Get-Method-of-C/" rel="next" title="C#前端开发之Get与Post方法">
+                <i class="fa fa-chevron-left"></i> C#前端开发之Get与Post方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://pgc23xl25.bkt.clouddn.com/blog/181009/a7I2C3k6JK.jpg?imageslim"
+                alt="贺蕴" />
+            
+              <p class="site-author-name" itemprop="name">贺蕴</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ni-chen-23-96/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-stack-overflow"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Cyprus-hy" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:heyuncc@163.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/Cyprus" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置环境"><span class="nav-number">2.</span> <span class="nav-text">配置环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体实现"><span class="nav-number">3.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据预处理"><span class="nav-number">3.1.</span> <span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#驾驶员人脸检测"><span class="nav-number">3.2.</span> <span class="nav-text">驾驶员人脸检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型训练与测试"><span class="nav-number">3.3.</span> <span class="nav-text">模型训练与测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">贺蕴</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">31k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">56 分钟</span>
+  
+</div>
+
+
+
+<!--
+
+
+
+-->
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Wechat,QQZone,Weibo,Douban,Twitter";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
